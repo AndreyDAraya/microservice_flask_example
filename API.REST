@@ -1,0 +1,168 @@
+### Create new user
+# Creates a new user in the system
+POST http://localhost:8000/api/v1/users HTTP/1.1
+Content-Type: application/json
+
+{
+    "first_name": "User",
+    "last_name": "Last Name",
+    "email": "user@email.com",
+    "password": "123456"
+}
+
+# Equivalent curl:
+# curl -X POST http://localhost:8000/api/v1/users \
+#   -H "Content-Type: application/json" \
+#   -d '{"first_name":"User","last_name":"Last Name","email":"user@email.com","password":"123456"}'
+
+# Expected response (201 Created):
+# {
+#   "id": 1,
+#   "email": "user@email.com",
+#   "first_name": "User",
+#   "last_name": "Last Name",
+#   "is_active": true
+# }
+
+# Possible errors:
+# 400 Bad Request - Invalid input data
+# 409 Conflict - Email already exists
+
+### Login
+# Authenticates a user and returns a JWT token
+POST http://localhost:8000/api/v1/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "user@email.com",
+    "password": "123456"
+}
+
+# Equivalent curl:
+# curl -X POST http://localhost:8000/api/v1/auth/login \
+#   -H "Content-Type: application/json" \
+#   -d '{"email":"user@email.com","password":"123456"}'
+
+# Expected response (200 OK):
+# {
+#   "access_token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+# }
+
+# Possible errors:
+# 400 Bad Request - Invalid credentials
+# 401 Unauthorized - User is inactive
+
+### Get all users
+# Returns a list of all users (requires authentication)
+GET http://localhost:8000/api/v1/users HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# Equivalent curl:
+# curl -X GET http://localhost:8000/api/v1/users \
+#   -H "Content-Type: application/json" \
+#   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+# Expected response (200 OK):
+# [
+#   {
+#     "id": 1,
+#     "email": "user@email.com",
+#     "first_name": "User",
+#     "last_name": "Last Name",
+#     "is_active": true
+#   }
+# ]
+
+# Possible errors:
+# 401 Unauthorized - Missing or invalid token
+
+### Get user by ID
+# Returns details of a specific user (requires authentication)
+GET http://localhost:8000/api/v1/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# Equivalent curl:
+# curl -X GET http://localhost:8000/api/v1/users/1 \
+#   -H "Content-Type: application/json" \
+#   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+# Expected response (200 OK):
+# {
+#   "id": 1,
+#   "email": "user@email.com",
+#   "first_name": "User",
+#   "last_name": "Last Name",
+#   "is_active": true
+# }
+
+# Possible errors:
+# 401 Unauthorized - Missing or invalid token
+# 404 Not Found - User not found
+
+### Update user
+# Updates an existing user's data (requires authentication)
+PUT http://localhost:8000/api/v1/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+{
+    "first_name": "Updated",
+    "last_name": "User"
+}
+
+# Equivalent curl:
+# curl -X PUT http://localhost:8000/api/v1/users/1 \
+#   -H "Content-Type: application/json" \
+#   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+#   -d '{"first_name":"Updated","last_name":"User"}'
+
+# Expected response (200 OK):
+# {
+#   "id": 1,
+#   "email": "user@email.com",
+#   "first_name": "Updated",
+#   "last_name": "User",
+#   "is_active": true
+# }
+
+# Possible errors:
+# 400 Bad Request - Invalid input data
+# 401 Unauthorized - Missing or invalid token
+# 404 Not Found - User not found
+
+### Delete user
+# Removes a user from the system (requires authentication)
+DELETE http://localhost:8000/api/v1/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# Equivalent curl:
+# curl -X DELETE http://localhost:8000/api/v1/users/1 \
+#   -H "Content-Type: application/json" \
+#   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+# Expected response (204 No Content):
+# No content in response body
+
+# Possible errors:
+# 401 Unauthorized - Missing or invalid token
+# 404 Not Found - User not found
+
+### Health check
+# Verifies service status
+GET http://localhost:8000/health HTTP/1.1
+Content-Type: application/json
+
+# Equivalent curl:
+# curl -X GET http://localhost:8000/health \
+#   -H "Content-Type: application/json"
+
+# Expected response (200 OK):
+# {
+#   "status": "healthy"
+# }
+
+# Possible errors:
+# 503 Service Unavailable - Service is not healthy
